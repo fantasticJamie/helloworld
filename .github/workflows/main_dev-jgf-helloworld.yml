@@ -27,7 +27,7 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-# ***********
+# ************
 
             
   # - uses: actions/checkout@v1
