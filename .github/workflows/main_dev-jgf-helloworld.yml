@@ -27,8 +27,23 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+# ******
 
-      - name: Upload artifact for deployment job
+  # - uses: actions/checkout@v1
+
+  # - run: mkdir -p path/to/artifact
+
+  # - run: echo hello > path/to/artifact/world.txt
+      - name: upload artifact to azure blob storage
+      - uses: fixpoint/azblob-upload-artifact@v4
+        with:
+          connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          name: hello-world-artifact
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+# *****
+
+      - name: Upload artifact for deployment job 
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
@@ -38,7 +53,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Production'
+      name: 'Dev'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
