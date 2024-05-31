@@ -29,6 +29,7 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 # ***********
 
+            
   # - uses: actions/checkout@v1
 
   # - run: mkdir -p path/to/artifact
@@ -41,7 +42,19 @@ jobs:
           container: github-action-artifacts
           # name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
+#---------------
+      - name: Upload to Azure Blob Storage
+        uses: cedric05/upload-to-azure-blob-storage@v1
+        with:
+            # source-file: a.out # source file to upload
+            source-file: ${{env.DOTNET_ROOT}}/myapp
+            # base-project-path: c++_projects/first-project # az backup directory
+            target-file: hello-worldjgf # az target file name
+            overwrite: 'true' #optional
+            container-name: github-action-artifacts # az storage container name
+            storage-account-name: devactgeoartifactshwst # az storage account name
+            creds: ${{ secrets.AZURE_CREDENTIALS }} # az create rbac output
+#---------------
 # *****
 
       - name: Upload artifact for deployment job 
