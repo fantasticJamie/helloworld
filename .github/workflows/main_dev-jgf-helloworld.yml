@@ -55,11 +55,14 @@ jobs:
 # *****
 
       - name: Upload artifact for deployment job 
-        uses: actions/upload-artifact@v3
+        id: artifact-upload-step
+        uses: actions/upload-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-          compression-level: 6  
+          compression-level: 6 
+      - name: Output artifact ID
+        run:  echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
   deploy:
     runs-on: windows-latest
