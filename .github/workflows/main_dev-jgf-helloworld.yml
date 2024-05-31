@@ -39,8 +39,8 @@ jobs:
         with:
           connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
           container: artifacts
-          name: .net-app
-          source: ${{env.DOTNET_ROOT}}/myapp
+          # name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
 # *****
 
