@@ -77,7 +77,7 @@ jobs:
 
   output:
        runs-on: windows-latest
-       needs: deploy
+       # needs: deploy
        steps:
        - name: Output github context info
          shell: bash
