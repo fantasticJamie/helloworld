@@ -50,11 +50,6 @@ jobs:
       - name: Output artifact ID
         run:  echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
         
-  output:
-    runs-on: windows-latest
-    steps:
-      - name: Output github context info
-        run: echo "${{ toJSON(github)}}"
     
   deploy:
     runs-on: windows-latest
@@ -79,3 +74,10 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0DF4FF6F7ADF4083BDDAA4437B12122C }}
           package: .
+
+  output:
+       runs-on: windows-latest
+       needs: deploy
+       steps:
+       - name: Output github context info
+         run: echo "${{ toJSON(github)}}"
