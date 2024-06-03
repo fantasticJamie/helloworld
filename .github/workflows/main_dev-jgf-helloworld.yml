@@ -4,76 +4,76 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - dev-jgf-helloworld
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
-  # build:
-  #   runs-on: windows-latest
+  build:
+    runs-on: windows-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Set up .NET Core
-  #       uses: actions/setup-dotnet@v1
-  #       with:
-  #         dotnet-version: '8.x'
-  #         include-prerelease: true
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.x'
+          include-prerelease: true
 
-  #     - name: Build with dotnet
-  #       run: dotnet build --configuration Release
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
-  #     - name: dotnet publish
-  #       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
            
 
-  #     - uses: LanceMcCarthy/Action-AzureBlobUpload@v2
-  #       name: Uploading to Azure storage...
-  #       with:
-  #         connection_string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
-  #         container_name: artifacts
-  #         source_folder: ${{env.DOTNET_ROOT}}/myapp
-  #         destination_folder: helloWorld
-  #         clean_destination_folder: true
+      - uses: LanceMcCarthy/Action-AzureBlobUpload@v2
+        name: Uploading to Azure storage...
+        with:
+          connection_string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          container_name: artifacts
+          source_folder: ${{env.DOTNET_ROOT}}/myapp
+          destination_folder: helloWorld
+          clean_destination_folder: true
 
 
-  #     - name: Upload artifact for deployment job 
-  #       id: artifact-upload-step
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: .net-app
-  #         path: ${{env.DOTNET_ROOT}}/myapp
-  #         compression-level: 9 
-  #     - name: Output artifact ID
-  #       run:  echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
+      - name: Upload artifact for deployment job 
+        id: artifact-upload-step
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+          compression-level: 9 
+      - name: Output artifact ID
+        run:  echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
         
     
-  # deploy:
-  #   runs-on: windows-latest
-  #   needs: build
-  #   environment:
-  #     name: 'Dev'
-  #     url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Dev'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-  #   steps:
-  #     - name: Download artifact from build job
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: .net-app
-  #     - name: Output artifact contents
-  #       run: ls 
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+      - name: Output artifact contents
+        run: ls 
 
-  #     - name: Deploy to Azure Web App
-  #       id: deploy-to-webapp
-  #       uses: azure/webapps-deploy@v2
-  #       with:
-  #         app-name: 'dev-jgf-helloworld'
-  #         slot-name: 'Production'
-  #         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0DF4FF6F7ADF4083BDDAA4437B12122C }}
-  #         package: .
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'dev-jgf-helloworld'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0DF4FF6F7ADF4083BDDAA4437B12122C }}
+          package: .
 
   output:
        runs-on: windows-latest
